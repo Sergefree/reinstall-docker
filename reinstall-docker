@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Обновление списка пакетов
+echo "Обновление списка пакетов..."
+sudo apt-get update
+
+# Удаление Docker и всей хуеты
+echo "Удаление Docker..."
+sudo apt-get purge -y docker-ce docker-ce-cli containerd.io
+
+# Очистка оставшихся писек
+echo "Очистка системы от ненужных пакетов..."
+sudo apt-get autoremove -y
+
+# Удаление системы тоесть файлов оставшихся
+echo "Удаление оставшихся файлов Docker..."
+sudo rm -rf /var/lib/docker
+sudo rm -rf /var/lib/containerd
+
+# Установка всякой хуеты нужной. Прям пиздец какой
+echo "Установка необходимых пакетов..."
+sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+
+# Добавление GPG ключа Docker. Так надо брат
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+# Добавление репозитория Docker. Это тоже пиздец как надо
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+# Обновление списка пакетов для нового репозитория а это не очень но надо
+echo "Обновление списка пакетов с новым репозиторием..."
+sudo apt-get update
+
+# Установка Docker CE да просто установка что ещё
+echo "Установка Docker CE..."
+sudo apt-get install -y docker-ce
+
+# Проверка статуса Docker проверяй и сьёбывай
+echo "Проверка статуса Docker..."
+sudo systemctl status docker
+
+echo "Docker успешно переустановлен! Радуся малец"
