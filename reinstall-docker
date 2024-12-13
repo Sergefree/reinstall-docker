@@ -14,7 +14,7 @@ sudo apt-get update
 
 # Удаление Docker и его зависимостей
 echo "Удаление Docker..."
-sudo apt-get purge -y docker-ce docker-ce-cli containerd.io
+sudo apt-get purge -y docker-engine docker docker.io docker-ce docker-ce-cli
 
 # Очистка оставшихся зависимостей
 echo "Очистка системы от ненужных пакетов..."
