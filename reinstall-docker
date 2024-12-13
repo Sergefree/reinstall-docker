@@ -1,5 +1,7 @@
+#!/bin/bash
 
-read -p "Вы точно хотите переустановить или по фану врубил сучка Docker? (y/n): " confirm
+# Запрос подтверждения у пользователя
+read -p "Вы точно хотите переустановить Docker? (y/n): " confirm
 
 if [[ "$confirm" != "y" ]]; then
     echo "Операция отменена."
@@ -10,39 +12,39 @@ fi
 echo "Обновление списка пакетов..."
 sudo apt-get update
 
-# Удаление Docker и всей хуеты
+# Удаление Docker и его зависимостей
 echo "Удаление Docker..."
-sudo apt-get purge -y docker-engine docker docker.io docker-ce docker-ce-cli
+sudo apt-get purge -y docker-ce docker-ce-cli containerd.io
 
-# Очистка оставшихся писек
+# Очистка оставшихся зависимостей
 echo "Очистка системы от ненужных пакетов..."
 sudo apt-get autoremove -y
 
-# Удаление системы тоесть файлов оставшихся
+# Удаление оставшихся файлов
 echo "Удаление оставшихся файлов Docker..."
 sudo rm -rf /var/lib/docker
 sudo rm -rf /var/lib/containerd
 
-# Установка всякой хуеты нужной. Прям пиздец какой
+# Установка необходимых зависимостей
 echo "Установка необходимых пакетов..."
 sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
 
-# Добавление GPG ключа Docker. Так надо брат
+# Добавление GPG ключа Docker
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
-# Добавление репозитория Docker. Это тоже пиздец как надо
+# Добавление репозитория Docker
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
-# Обновление списка пакетов для нового репозитория а это не очень но надо
+# Обновление списка пакетов для нового репозитория
 echo "Обновление списка пакетов с новым репозиторием..."
 sudo apt-get update
 
-# Установка Docker CE да просто установка что ещё
+# Установка Docker CE
 echo "Установка Docker CE..."
 sudo apt-get install -y docker-ce
 
-# Проверка статуса Docker проверяй и сьёбывай
+# Проверка статуса Docker
 echo "Проверка статуса Docker..."
 sudo systemctl status docker
 
-echo "Docker успешно переустановлен! Радуся малец"
+echo "Docker успешно переустановлен!"
